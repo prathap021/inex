@@ -120,14 +120,21 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                       size: 30,
                     ),
                     onPressed: () {
-                      //CustomBottomSheet().bottomsheet(context);
+
                       showModalBottomSheet(
-                          isScrollControlled: true,
-                          isDismissible: true,
-                          context: context,
-                          builder: (context) {
-                            return CusBottomSheet();
-                          });
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                              padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          // You can wrap this Column with Padding of 8.0 for better design
+                          child:CusBottomSheet()
+                          );
+                        },
+                      );
+
                     },
                   ),
                 ),
