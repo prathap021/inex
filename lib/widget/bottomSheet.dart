@@ -16,7 +16,6 @@ class CusBottomSheet extends StatefulWidget {
   Expense? expense;
   bool? update;
   bool? updateinorex;
-
   CusBottomSheet({
     super.key,
     this.update = false,
@@ -52,18 +51,16 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
     expo.type = income ? "Income" : "Expense";
     expo.expense = income ? " " : amtcontroller.text;
     expo.income = income ? amtcontroller.text : " ";
-    //expo.income = "1000";
   }
 
   updateExpo() async {
     print(mapdata);
     expo.type = mapdata["type"];
-    expo.income = mapdata["income"];
     expo.id = mapdata["id"];
     expo.date = mapdata["date"];
     expo.name = namecontroller.text;
-    expo.expense = income ? "0" : amtcontroller.text;
-    expo.income = income ? amtcontroller.text : "0";
+    expo.expense = widget.updateinorex! ? " " : amtcontroller.text;
+    expo.income = widget.updateinorex! ? amtcontroller.text : " ";
     expo.description = descontroller.text;
   }
 
@@ -84,10 +81,9 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
     mapdata = widget.expense!.toJson();
     print(mapdata["name"]);
     namecontroller.text = mapdata["name"];
-    amtcontroller.text = mapdata["expense"];
+    amtcontroller.text = widget.updateinorex!?mapdata["income"]:mapdata["expense"];
     descontroller.text = mapdata["description"];
   }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -181,13 +177,20 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
                   inputFormatters: <TextInputFormatter>[
                     // for below version 2 use this
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-// for version 2 and greater youcan also use this
                     FilteringTextInputFormatter.digitsOnly
 
                   ],
 
 
                   decoration: InputDecoration(
+                    suffixIcon: Visibility(
+                      visible: !widget.update!,
+                      child: IconButton(onPressed: (){
+                        setState(() {
+                          income=!income;
+                        });
+                      }, icon: Text(income ? "IN" : "EX",style: TextStyle(color:income ? Colors.green : Colors.redAccent,fontSize: 17,fontWeight: FontWeight.bold),)),
+                    ),
                     hintText: 'Enter Amount',
 
                     hintStyle: TextStyle(fontSize: 16),
@@ -269,7 +272,6 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
                         print(s);
                         Navigator.of(context).pop();
                         InEx.globalKey.currentState!.totalamount();
-
                         await SPHelper().removeValues("Id");
                       }
                           : () async {
@@ -279,6 +281,7 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
                         print(i);
                         Navigator.of(context).pop();
                         InEx.globalKey.currentState!.totalamount();
+
                       },
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.all(0.0),
@@ -325,6 +328,7 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
                         print(i);
                         Navigator.of(context).pop();
                         InEx.globalKey.currentState!.totalamount();
+                        InEx.globalKey.currentState!.changetap(income?0:1);
                       },
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.all(0.0),
@@ -351,56 +355,6 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
                     ),
                   ),
                 ),
-
-                Visibility(
-                  visible:false,
-                  child: SizedBox(
-                    width: 150,
-                    child: MaterialButton(
-                      onPressed: widget.update!
-                          ? () async {
-                        await updateExpo();
-                        await DBProvider.db.updatePerson(expo);
-                        Navigator.of(context).pop();
-                        InEx.globalKey.currentState!.totalamount();
-                      }
-                          : () async {
-                        print("Db clicked");
-                        await saveExpo();
-                        var i = await DBProvider.db.createDenomination(expo);
-                        print(i);
-                        Navigator.of(context).pop();
-                        InEx.globalKey.currentState!.totalamount();
-                      },
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.all(0.0),
-                      child: Ink(
-                        decoration: const BoxDecoration(
-                          color: Colors.orangeAccent,
-                          /* gradient: LinearGradient(colors: [
-     Colors.green,Colors.green
-    ]
-    ),*/
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                        child: Container(
-                          constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'update',
-                            textAlign: TextAlign.center,style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-
-
-                    ),
-                  ),
-                ),
-
-
-
-
               ],
             ),
             SizedBox(height: 20,),

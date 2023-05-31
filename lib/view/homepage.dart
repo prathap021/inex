@@ -42,9 +42,14 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
     totalamount();
+    tabController = TabController(
+      initialIndex: 0,
+      length: tablength,
+      vsync: this,
+    );
   }
+
 
   totalamount() async {
     _income.clear();
@@ -88,12 +93,13 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
           toexpo.fold(0, (previousValue, element) => previousValue + element);
     });
 
-    tabController = TabController(
-      initialIndex: 0,
-      length: tablength,
-      vsync: this,
-    );
+
     setState(() {});
+  }
+  changetap(int Index){
+    setState(() {
+      tabController!.animateTo(Index,duration: Duration(microseconds: 300),curve: Curves.linear);
+    });
   }
 
   @override
@@ -125,7 +131,9 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                         isScrollControlled: true,
                         context: context,
                         builder: (BuildContext context) {
-                          return CusBottomSheet();
+                          return CusBottomSheet(
+
+                          );
                         },
                       );
 
@@ -301,7 +309,6 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                           print("id ------>" + _income[index].id.toString());
                           await DBProvider.db.deletePersonWithId(
                               int.parse(_income[index].id.toString()));
-
                           _income.removeAt(index);
                           await totalamount();
                           await InEx.globalKey.currentState!.totalamount();
