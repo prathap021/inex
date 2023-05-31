@@ -125,13 +125,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                         isScrollControlled: true,
                         context: context,
                         builder: (BuildContext context) {
-                          return Container(
-                              padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
-                          ),
-                          // You can wrap this Column with Padding of 8.0 for better design
-                          child:CusBottomSheet()
-                          );
+                          return CusBottomSheet();
                         },
                       );
 
@@ -257,9 +251,9 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                             onLongPress: () async {
                               setState(() {});
                               print(
-                                  "id ------>" + _income[index].id.toString());
+                                  "id ------>" + _expenses[index].id.toString());
                               await DBProvider.db.deletePersonWithId(
-                                  int.parse(_income[index].id.toString()));
+                                  int.parse(_expenses[index].id.toString()));
 
                               _expenses.removeAt(index);
                               await totalamount();
@@ -319,7 +313,8 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                               context: context,
                               builder: (context) {
                                 return CusBottomSheet(
-                                  expense: _expenses[index],
+                                  updateinorex: true,
+                                  expense: _income[index],
                                   update: true,
                                 );
                               });
