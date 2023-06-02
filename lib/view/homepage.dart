@@ -110,7 +110,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
       length: tablength,
       child: SafeArea(
         child: Scaffold(
-            backgroundColor: Colors.blueAccent,
+            backgroundColor:  Colors.cyan,
             floatingActionButton: AnimatedSlide(
               duration: duration,
               offset: _showFab ? Offset.zero : Offset(0, 2),
@@ -120,7 +120,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: FloatingActionButton(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Colors.cyan,
                     child: Icon(
                       Icons.add,
                       size: 30,
@@ -166,13 +166,44 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  (apitotamt - totexpo).toString(),
+                                  ("₹\t${apitotamt - totexpo}").toString(),
                                   style: TextStyle(
-                                      fontSize: 40,
+                                      fontSize: 35,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ))),
+                      Container(
+                        // height: 100,
+                        // color: Colors.white,
+                        child: Column(
+                          // crossAxisAlignment: CrossAxisAlignment.stretch,
+                          // mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text("INCOME",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                                Text("EXPENSE",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+
+                              ],
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text("₹\t$apitotamt",style: TextStyle(fontSize: 20),),
+                                Text("₹\t$totexpo",style: TextStyle(fontSize: 20),),
+
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 50,),
+
                       Container(
                         height: 500,
                         decoration: BoxDecoration(
@@ -239,7 +270,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                   var month = DateFormat.MMMM().format(tempDate);
 
                   return SizedBox(
-                    height: 100,
+                    // height: 85,
                     child: GestureDetector(
                       onDoubleTap: () {
                         showModalBottomSheet(
@@ -253,9 +284,18 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                               );
                             });
                       },
-                      child: Card(
-                          elevation: 10,
-                          child: ListTile(
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 22,bottom: 5),
+                              child: Text(month.toString() +
+                                  "\t" +
+                                  tempDate.day.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                            ),
+                          ),
+                          ListTile(
                             onLongPress: () async {
                               setState(() {});
                               print(
@@ -267,14 +307,18 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                               await totalamount();
                               await InEx.globalKey.currentState!.totalamount();
                             },
-                            leading: Text(month.toString() +
-                                "\t" +
-                                tempDate.day.toString()),
-                            title: Text(_expenses[index].name!),
-                            subtitle: Text(_expenses[index].description!),
+                            leading: CircleAvatar(radius: 30,backgroundColor: Colors.cyan,
+                                child: Text(_expenses[index].name![0].toUpperCase(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),)),
+                            // leading: Text(month.toString() +
+                            //     "\t" +
+                            //     tempDate.day.toString()),
+                            title: Text(_expenses[index].name!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                            subtitle: Text(_expenses[index].description!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                             trailing:
-                                Text(_expenses[index].expense!.toString()),
-                          )),
+                                Text("₹\t"+_expenses[index].expense!.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 })
@@ -302,7 +346,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                   var month = DateFormat.MMMM().format(tempDate);
 
                   return SizedBox(
-                      height: 100,
+                      // height: 130,
                       child: GestureDetector(
                         onLongPress: () async {
                           setState(() {});
@@ -326,16 +370,27 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                                 );
                               });
                         },
-                        child: Card(
-                            elevation: 10,
-                            child: ListTile(
-                              leading: Text(month.toString() +
-                                  "\t" +
-                                  tempDate.day.toString()),
-                              title: Text(_income[index].name!),
-                              subtitle: Text(_income[index].description!),
-                              trailing: Text(_income[index].income!.toString()),
-                            )),
+                        child: Column(
+                          children: [
+                            
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 22,bottom: 5),
+                                child: Text(month.toString() +
+                                "\t\t\t" +
+                                tempDate.day.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                              ),
+                            ),
+                            ListTile(
+                              leading: CircleAvatar(radius: 30,backgroundColor: Colors.cyan,
+                              child: Text(_income[index].name![0].toUpperCase(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),)),
+                              title: Text(_income[index].name!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                              subtitle: Text(_income[index].description!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                              trailing: Text("₹\t"+_income[index].income!.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                            ),
+                          ],
+                        ),
                       ));
                 })
             : Center(

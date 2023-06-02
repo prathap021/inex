@@ -216,7 +216,6 @@ class _CusBottomSheetState extends State<CusBottomSheet> {
                   child: Card(
                     elevation: 10,
                     shape: RoundedRectangleBorder(
-
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: Column(
