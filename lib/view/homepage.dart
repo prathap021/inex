@@ -398,7 +398,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                       ));
                 })
             : Center(
-                child: CircularProgressIndicator(),git
+                child: CircularProgressIndicator()
               )
         : Center(
             child: Text("Not Income"),
