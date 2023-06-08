@@ -48,6 +48,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
       length: tablength,
       vsync: this,
     );
+
   }
 
 
@@ -264,8 +265,10 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                   context,
                   index,
                 ) {
+                  List reverse_expenses=_expenses.reversed.toList();
+                  // print(reverse_expenses);
                   DateTime tempDate = new DateFormat("yyyy-MM-dd hh:mm:ss")
-                      .parse(_expenses[index].date!);
+                      .parse(reverse_expenses[index].date!);
 
                   var month = DateFormat.MMMM().format(tempDate);
 
@@ -279,7 +282,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                             context: context,
                             builder: (context) {
                               return CusBottomSheet(
-                                expense: _expenses[index],
+                                expense: reverse_expenses[index],
                                 update: true,
                               );
                             });
@@ -299,23 +302,23 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                             onLongPress: () async {
                               setState(() {});
                               print(
-                                  "id ------>" + _expenses[index].id.toString());
+                                  "id ------>" + reverse_expenses[index].id.toString());
                               await DBProvider.db.deletePersonWithId(
-                                  int.parse(_expenses[index].id.toString()));
+                                  int.parse(reverse_expenses[index].id.toString()));
 
-                              _expenses.removeAt(index);
+                              reverse_expenses.removeAt(index);
                               await totalamount();
                               await InEx.globalKey.currentState!.totalamount();
                             },
                             leading: CircleAvatar(radius: 30,backgroundColor: Colors.cyan,
-                                child: Text(_expenses[index].name![0].toUpperCase(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),)),
+                                child: Text(reverse_expenses[index].name![0].toUpperCase(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),)),
                             // leading: Text(month.toString() +
                             //     "\t" +
                             //     tempDate.day.toString()),
-                            title: Text(_expenses[index].name!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                            subtitle: Text(_expenses[index].description!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                            title: Text(reverse_expenses[index].name!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                            subtitle: Text(reverse_expenses[index].description!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                             trailing:
-                                Text("₹\t"+_expenses[index].expense!.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                Text("₹\t"+reverse_expenses[index].expense!.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                           ),
                         ],
                       ),
@@ -340,8 +343,9 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                   context,
                   index,
                 ) {
+                  List reversed_income=_income.reversed.toList();
                   DateTime tempDate = new DateFormat("yyyy-MM-dd hh:mm:ss")
-                      .parse(_income[index].date!);
+                      .parse(reversed_income[index].date!);
 
                   var month = DateFormat.MMMM().format(tempDate);
 
@@ -350,10 +354,10 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                       child: GestureDetector(
                         onLongPress: () async {
                           setState(() {});
-                          print("id ------>" + _income[index].id.toString());
+                          print("id ------>" + reversed_income[index].id.toString());
                           await DBProvider.db.deletePersonWithId(
-                              int.parse(_income[index].id.toString()));
-                          _income.removeAt(index);
+                              int.parse(reversed_income[index].id.toString()));
+                          reversed_income.removeAt(index);
                           await totalamount();
                           await InEx.globalKey.currentState!.totalamount();
                         },
@@ -365,7 +369,7 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                               builder: (context) {
                                 return CusBottomSheet(
                                   updateinorex: true,
-                                  expense: _income[index],
+                                  expense: reversed_income[index],
                                   update: true,
                                 );
                               });
@@ -384,17 +388,17 @@ class _InExState extends State<InEx> with TickerProviderStateMixin {
                             ),
                             ListTile(
                               leading: CircleAvatar(radius: 30,backgroundColor: Colors.cyan,
-                              child: Text(_income[index].name![0].toUpperCase(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),)),
-                              title: Text(_income[index].name!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                              subtitle: Text(_income[index].description!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                              trailing: Text("₹\t"+_income[index].income!.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                              child: Text(reversed_income[index].name![0].toUpperCase(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),)),
+                              title: Text(reversed_income[index].name!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                              subtitle: Text(reversed_income[index].description!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                              trailing: Text("₹\t"+reversed_income[index].income!.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                             ),
                           ],
                         ),
                       ));
                 })
             : Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(),git
               )
         : Center(
             child: Text("Not Income"),
